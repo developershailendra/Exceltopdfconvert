@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Sagar Tomar</h1>
+    <a>sagar</a>
+    <a href="http://localhost:8080/home/pdf"><button>Download PDF</button></a>
+
+    <h1>Excel File Upload</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" accept=".xlsx,.xls">
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const resultDiv = document.getElementById('result');
+
+        function uploadFile() {
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file',
+                file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST',
+                'http://localhost:8080/home/upload'); // Replace with your API endpoint
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resultDiv.textContent = 'Data inserted successfully: ' + xhr.responseText;
+                } else {
+                    resultDiv.textContent = 'Error occurred while processing file: ' + xhr.responseText;
+                }
+            };
+
+            xhr.send(formData);
+        }
+
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            uploadFile();
+        });
+    </script>
+
+
+</body>
+
+</html>
