@@ -68,4 +68,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    // public List<User> getAllUsers() {
+    //     throw new UnsupportedOperationException("Not supported yet.");
+    // }
+
+    // public User createUser(User user) {
+    //     throw new UnsupportedOperationException("Not supported yet.");
+    // }
+
 }

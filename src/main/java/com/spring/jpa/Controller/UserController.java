@@ -10,13 +10,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itextpdf.text.DocumentException;
+import com.spring.jpa.Entity.Customer;
 import com.spring.jpa.Entity.User;
+import com.spring.jpa.Repository.UserRepository;
+import com.spring.jpa.Service.CustomerService;
 import com.spring.jpa.Service.PdfService;
 import com.spring.jpa.Service.UserService;
 
@@ -30,13 +34,52 @@ public class UserController {
     @Autowired
     private PdfService pdfService;
 
-    
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestBody Customer customer) {
+        return customerService.registerCustomer(customer);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Customer customer) {
+        return customerService.loginCustomer(customer.getUsername(), customer.getPassword());
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
+        try {
+            userService.saveExcelData(file);
+            return ResponseEntity.ok("Data inserted successfully.");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error occurred while processing file.");
+        }
+    }
+
     @GetMapping("/pdf")
     public ResponseEntity<byte[]> getUsersPdf() {
         List<User> users = userService.findAll();
         StringBuilder sb = new StringBuilder();
 
-        for (User user : users) {  // Correctly iterate over each User
+        // Check if users list is empty
+        if (users.isEmpty()) {
+            String message = "No user data available. Please insert data first.";
+            return ResponseEntity.status(HttpStatus.OK).body(message.getBytes());
+        }
+
+        // Check if users list is empty
+
+        for (User user : users) { // Correctly iterate over each User
             sb.append("ID: ").append(user.getId()).append("\n");
             sb.append("Name: ").append(user.getName()).append("\n");
             sb.append("Email: ").append(user.getEmail()).append("\n\n");
@@ -54,15 +97,4 @@ public class UserController {
         }
     }
 
-    
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
-        try {
-            userService.saveExcelData(file);
-            return ResponseEntity.ok("Data inserted successfully.");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error occurred while processing file.");
-        }
-    }
 }

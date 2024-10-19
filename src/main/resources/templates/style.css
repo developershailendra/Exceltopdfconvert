@@ -1,0 +1,54 @@
+.bg {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(180, 206, 231);
+    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.Excel {
+    /* background-color: blueviolet; */
+    position: relative;
+    justify-content: center;
+    display: flex;
+    top: 20vh;
+    color: #fff;
+}
+
+.pdfbutton {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 30vh;
+}
+
+
+.button {
+    --glow-color: rgb(217, 176, 255);
+    --glow-spread-color: rgba(191, 123, 255, 0.781);
+    /* --enhanced-glow-color: rgb(231, 206, 255); */
+    --btn-color: rgb(100, 61, 136);
+    border: 0.25em solid var(--glow-color);
+    padding: 1em 3em;
+    color: var(--btn-color);
+    font-size: 15px;
+    font-weight: bold;
+    background-color: var(--glow-color);
+    border-radius: 1em;
+    outline: none;
+    box-shadow: 0 0 1em 0.25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0.75em 0.25em var(--glow-color);
+    text-shadow: 0 0 0.5em var(--glow-color);
+    position: relative;
+    transition: all 0.35;
+}
+
+
+.button:hover {
+    background-color: var(--glow-color);
+    box-shadow: 0 1em 0.25em var(--glow-color), 0.0 4en 2em var(--glow-spread-color),
+        inset 0.0 0.75em 0.25em var(--glow-color);
+}
